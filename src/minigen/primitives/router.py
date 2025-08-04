@@ -27,8 +27,10 @@ def create_llm_router(agents: Dict[str, Agent]) -> Callable[[NetworkState], str]
         "Otherwise, choose the best agent for the very next step. Your response MUST be a JSON object matching the required format."
     )
 
-    router_agent = Agent(name="Router", model="gemini-2.5-pro", system_prompt=routing_system_prompt, api_key="AIzaSyBv9pjgGcE6Dl8r3Fa4ZEi_YPOQamqT6vs", 
-    base_url="https://generativelanguage.googleapis.com/v1beta/openai/",)
+    router_agent = Agent(
+        name="Router", 
+        system_prompt=routing_system_prompt
+    )
 
     def llm_router_function(state: NetworkState) -> str: 
         logger.info("LLM Router is making a decision...")
