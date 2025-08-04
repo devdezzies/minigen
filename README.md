@@ -16,7 +16,7 @@ def lbs_to_kg(lbs):
 
 This decorator will extend your function by adding an additional method for JSON creation. 
 
-```json
+```
 {
     'type': 'function',
     'function': {'name': 'lbs_to_kg',
@@ -36,6 +36,8 @@ Another important part is session context. This contains information that the mo
 from openai import OpenAI 
 from minigen import tool, AgentSession
 
+client = OpenAI()
+
 @tool(description="Convert lbs to kg")
 def lbs_to_kg(lbs): 
     return lbs * 0.45359237
@@ -47,3 +49,5 @@ with AgentSession(client=client, tools=[add]) as session:
 ```
 
 You can also add system prompt to the session. Just add `session.assistant("You are a helpful assistant")`
+
+# Primitives
