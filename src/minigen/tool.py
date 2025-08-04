@@ -1,6 +1,8 @@
 import inspect 
 from typing import get_type_hints 
 
+_tool_registry = {}
+
 def tool(description=None, strict=True): 
     def decorator(func): 
         signature = inspect.signature(func)
@@ -8,6 +10,8 @@ def tool(description=None, strict=True):
 
         properties = {}
         required = [] 
+
+        _tool_registry[func.__name__] = func
 
         for name, param in signature.parameters.items():
             param_type = type_hints.get(name, str) 
@@ -45,4 +49,8 @@ def tool(description=None, strict=True):
 
         func._is_tool = True 
         return func 
+    
     return decorator
+
+def get_tool_func(name: str): 
+    return _tool_registry.get(name)
