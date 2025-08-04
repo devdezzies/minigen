@@ -3,9 +3,10 @@ from openai import OpenAI
 from .context import AgentSession
 from pydantic import BaseModel, ValidationError
 from typing import Optional, Type
+import os
 
 class Agent: 
-    def __init__(self, model="gpt-4", base_url=None, api_key=None, tools: Optional[list]=None, name: Optional[str] = "MiniGen Agent", system_prompt: Optional[str] = None): 
+    def __init__(self, model=os.environ.get("DEFAULT_MODEL"), base_url=os.environ.get("BASE_URL"), api_key=os.environ.get("OPENAI_API_KEY"), tools: Optional[list]=None, name: Optional[str] = "MiniGen Agent", system_prompt: Optional[str] = None): 
         self.model = model 
         self.name = name
         self.client = OpenAI(base_url=base_url, api_key=api_key)
