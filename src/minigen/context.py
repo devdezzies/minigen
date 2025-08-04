@@ -2,14 +2,18 @@ from .utils.logging import logger
 from .tool import get_tool_func
 from openai import OpenAI
 import json
-from typing import Type
+from typing import Type, Optional
 from pydantic import BaseModel
 
 class AgentSession: 
-    def __init__(self, client: OpenAI, tools=None): 
+    def __init__(self, client: OpenAI, tools=None, system_prompt: Optional[str] = None): 
         self.client = client
         self.messages = []
         self.tools = [tool.tool_spec for tool in tools] if tools else []
+
+        if system_prompt: 
+            self.messages.append({"role": "system", "content": system_prompt})
+            logger.info(f"System prompt set: {system_prompt}")
     
     def __enter__(self): 
         logger.info("Starting agent session...")

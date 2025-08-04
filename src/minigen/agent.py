@@ -5,10 +5,11 @@ from pydantic import BaseModel, ValidationError
 from typing import Optional, Type
 
 class Agent: 
-    def __init__(self, model="gpt-4", base_url=None, api_key=None, tools: Optional[list]=None): 
+    def __init__(self, model="gpt-4", base_url=None, api_key=None, tools: Optional[list]=None, name: Optional[str] = "MiniGen Agent", system_prompt: Optional[str] = None): 
         self.model = model 
+        self.name = name
         self.client = OpenAI(base_url=base_url, api_key=api_key)
-        self.session = AgentSession(client=self.client, tools=tools)
+        self.session = AgentSession(client=self.client, tools=tools, system_prompt=system_prompt)
 
     def chat(self, prompt: str, response_model: Optional[Type[BaseModel]] = None): 
         logger.info(f"Prompt: {prompt}")
@@ -27,3 +28,6 @@ class Agent:
             response = self.session.run(model=self.model) 
             logger.info(f"Response: {response}")
             return response
+    
+    def clear_session(self): 
+        self.session.messages = [msg for msg in self.session.messages if msg["role"] == "system"]
