@@ -1,8 +1,9 @@
 from .utils.logging import logger
-from .tool import _tool_registry as tregistry
 from .tool import get_tool_func
 from openai import OpenAI
 import json
+from typing import Type
+from pydantic import BaseModel
 
 class AgentSession: 
     def __init__(self, client: OpenAI, tools=None): 
@@ -36,7 +37,25 @@ class AgentSession:
             "content": result
         })
         logger.info(f"Tool '{name}': {result}")
+    
+    def parse_run(self, response_model: Type[BaseModel], model="gpt-4", **kwargs):
+        logger.info(f"Running session with parsing for model {response_model.__name__}")
+        try: 
+            parsed_response = self.client.chat.completions.parse( 
+                model=model, 
+                messages=self.messages, 
+                response_format=response_model, 
+                **kwargs
+            )
 
+            self.assistant(parsed_response.model_dump_json())
+
+            return parsed_response
+        except Exception as e: 
+            logger.error(f"Error during parsing run: {e}", exc_info=True)
+            raise e
+         
+        
     def run(self, model="gpt-4", **kwargs): 
         response = self.client.chat.completions.create( 
             model=model, 
