@@ -1,5 +1,6 @@
 import inspect 
-from typing import get_type_hints 
+from pydantic import BaseModel
+from typing import get_type_hints
 
 _tool_registry = {}
 
@@ -44,7 +45,7 @@ def tool(description=None, strict=True):
                     "required": required
                 },
                 "strict": strict
-            }
+            }, 
         }
 
         func._is_tool = True 
