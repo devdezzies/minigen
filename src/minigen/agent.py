@@ -9,7 +9,11 @@ class Agent:
         self.model = model 
         self.name = name
         self.client = OpenAI(base_url=base_url, api_key=api_key)
-        self.session = AgentSession(client=self.client, tools=tools, system_prompt=system_prompt)
+        self.session = AgentSession(
+            client=self.client, 
+            tools=tools, 
+            system_prompt=system_prompt
+        )
 
     def chat(self, prompt: str, response_model: Optional[Type[BaseModel]] = None): 
         logger.info(f"Prompt: {prompt}")

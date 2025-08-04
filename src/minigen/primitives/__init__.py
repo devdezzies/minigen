@@ -1,4 +1,4 @@
 from .chain import Chain
-from .router import Router
+from .router import create_llm_router
 
-__all__ = ["Chain", "Router"]
+__all__ = ["Chain", "create_llm_router"]
