@@ -47,6 +47,7 @@ class AgentSession:
         )
 
         message = response.choices[0].message  
+        
         tool_calls = message.tool_calls or [] 
         self.messages.append({
             "role": "assistant", 
