@@ -4,9 +4,15 @@ from openai import OpenAI
 import json
 from typing import Type, Optional
 from pydantic import BaseModel
+import os
 
 class AgentSession: 
-    def __init__(self, client: OpenAI, tools=None, system_prompt: Optional[str] = None): 
+    def __init__(self, client: Optional[OpenAI] = None, tools=None, system_prompt: Optional[str] = None): 
+        if not client: 
+            client = OpenAI(
+                base_url=os.environ.get("BASE_URL"), 
+                api_key=os.environ.get("OPENAI_API_KEY"), 
+            )
         self.client = client
         self.messages = []
         self.tools = [tool.tool_spec for tool in tools] if tools else []
@@ -42,7 +48,7 @@ class AgentSession:
         })
         logger.info(f"Tool '{name}': {result}")
     
-    def parse_run(self, response_model: Type[BaseModel], model="gpt-4", **kwargs):
+    def parse_run(self, response_model: Type[BaseModel], model=os.environ.get("DEFAULT_MODEL"), **kwargs):
         logger.info(f"Running session with parsing for model {response_model.__name__}")
         try: 
             parsed_response = self.client.chat.completions.parse( 
@@ -60,7 +66,7 @@ class AgentSession:
             raise e
          
         
-    def run(self, model="gpt-4", **kwargs): 
+    def run(self, model=os.environ.get("DEFAULT_MODEL"), **kwargs): 
         response = self.client.chat.completions.create( 
             model=model, 
             messages=self.messages, 
