@@ -1,7 +1,7 @@
 [project]
 name = "minigen"
 version = "0.1.0"
-description = "Add your description here"
+description = "a lightweight python framework library for building agents"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
