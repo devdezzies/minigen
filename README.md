@@ -342,13 +342,6 @@ network.set_router(custom_router)
 - `tools`: List of functions the agent can call
 - `model`: LLM model to use (defaults to environment setting)
 - `max_retries`: Maximum retry attempts for failed requests
-- `timeout`: Request timeout in seconds
-
-**Methods:**
-- `chat(message: str) -> str`: Send message and get response
-- `get_conversation_history() -> List[Dict]`: Get full conversation
-- `clear_memory()`: Clear conversation history
-- `add_tool(tool: Callable)`: Add a new tool to the agent
 
 ## Contributing
 
